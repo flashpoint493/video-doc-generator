@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "video-doc-generator"
-version = "0.1.1"  # x-release-please-version
+version = "0.1.2"  # x-release-please-version
 description = "A Python package that manages video links, calls video parsing APIs to read and parse videos, and converts video content into professional documents and analysis reports."
 readme = "README.md"
 requires-python = ">=3.8"
