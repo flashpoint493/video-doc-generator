@@ -3,7 +3,7 @@
 ![PyPI Version](https://img.shields.io/pypi/v/video-doc-generator)
 ![License](https://img.shields.io/github/license/flashpoint493/video-doc-generator)
 ![Python Version](https://img.shields.io/pypi/pyversions/video-doc-generator)
-![Build Status](https://img.shields.io/github/actions/workflow/status/flashpoint493/video-doc-generator/ci.yml?branch=main)
+![CI](https://github.com/flashpoint493/video-doc-generator/actions/workflows/ci.yml/badge.svg)
 ![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)
 
 > 一个能够管理视频链接，调用视频解析 API 读取和解析视频，并将视频内容转换为专业文档和分析说明的 Python 包。
