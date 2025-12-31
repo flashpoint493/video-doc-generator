@@ -4,9 +4,6 @@
 提供 CLI 工具来使用视频转文档生成器。
 """
 
-import os
-from pathlib import Path
-
 import click
 
 from video_doc_generator.generator import DocumentGenerator
@@ -66,7 +63,9 @@ def list():
 @click.option("--output-dir", default="docs", help="输出目录")
 @click.option("--api-key", envvar="VIDEO_PARSER_API_KEY", help="视频解析 API 密钥")
 @click.option("--api-url", envvar="VIDEO_PARSER_API_URL", help="视频解析 API 地址")
-@click.option("--use-get", is_flag=True, default=True, help="使用 GET 方法（BigGPT 推荐，默认启用）")
+@click.option(
+    "--use-get", is_flag=True, default=True, help="使用 GET 方法（BigGPT 推荐，默认启用）"
+)
 def parse(url: str, output_dir: str, api_key: str, api_url: str, use_get: bool):
     """解析视频并生成文档"""
     click.echo(f"正在解析视频: {url}")
@@ -86,14 +85,16 @@ def parse(url: str, output_dir: str, api_key: str, api_url: str, use_get: bool):
 
     except Exception as e:
         click.echo(f"✗ 错误: {e}", err=True)
-        raise click.Abort()
+        raise click.Abort() from e
 
 
 @cli.command()
 @click.option("--output-dir", default="docs", help="输出目录")
 @click.option("--api-key", envvar="VIDEO_PARSER_API_KEY", help="视频解析 API 密钥")
 @click.option("--api-url", envvar="VIDEO_PARSER_API_URL", help="视频解析 API 地址")
-@click.option("--use-get", is_flag=True, default=True, help="使用 GET 方法（BigGPT 推荐，默认启用）")
+@click.option(
+    "--use-get", is_flag=True, default=True, help="使用 GET 方法（BigGPT 推荐，默认启用）"
+)
 def process_all(output_dir: str, api_key: str, api_url: str, use_get: bool):
     """处理所有已添加的视频"""
     manager = VideoManager()

@@ -42,7 +42,6 @@ class DocumentGenerator:
             生成的文件路径
         """
         metadata = parse_result.metadata
-        transcript = parse_result.transcript
 
         # 生成文件名
         if filename is None:
@@ -112,7 +111,9 @@ class DocumentGenerator:
                     start_time = segment.get("start", 0)
                     end_time = segment.get("end", 0)
                     text = segment.get("text", "")
-                    lines.append(f"#### 片段 {i} ({self._format_time(start_time)} - {self._format_time(end_time)})\n")
+                    lines.append(
+                        f"#### 片段 {i} ({self._format_time(start_time)} - {self._format_time(end_time)})\n"
+                    )
                     lines.append(f"{text}\n")
                     lines.append("\n")
 
@@ -149,7 +150,9 @@ class DocumentGenerator:
             analysis.append(f"本视频转录文本共包含约 {word_count} 个词。")
 
             if metadata.duration:
-                words_per_minute = word_count / (metadata.duration / 60) if metadata.duration > 0 else 0
+                words_per_minute = (
+                    word_count / (metadata.duration / 60) if metadata.duration > 0 else 0
+                )
                 analysis.append(f"语速约为每分钟 {int(words_per_minute)} 个词。")
 
         if not analysis:

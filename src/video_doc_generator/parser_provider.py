@@ -5,9 +5,8 @@
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Optional
 
-from video_doc_generator.parser import VideoParseResult
+from video_doc_generator.models import VideoParseResult
 
 
 class VideoParserProvider(ABC):
@@ -46,4 +45,3 @@ class VideoParserProvider(ABC):
     def get_provider_name() -> str:
         """获取提供商名称"""
         pass
-

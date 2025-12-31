@@ -86,7 +86,7 @@ class BigGPTProvider(VideoParserProvider):
             return self._parse_response(data, video_url)
 
         except requests.exceptions.RequestException as e:
-            raise Exception(f"BigGPT API 调用失败: {e}")
+            raise Exception(f"BigGPT API 调用失败: {e}") from e
 
     async def parse_async(self, video_url: str, **kwargs) -> VideoParseResult:
         """异步解析视频"""
@@ -130,7 +130,7 @@ class BigGPTProvider(VideoParserProvider):
                 return self._parse_response(data, video_url)
 
         except aiohttp.ClientError as e:
-            raise Exception(f"BigGPT API 调用失败: {e}")
+            raise Exception(f"BigGPT API 调用失败: {e}") from e
 
     def _parse_response(self, data: Dict, video_url: str) -> VideoParseResult:
         """解析 API 响应数据"""
@@ -160,7 +160,8 @@ class BigGPTProvider(VideoParserProvider):
 
         metadata = VideoMetadata(
             url=video_url,
-            title=title or (f"Video {data.get('id', 'Unknown')}" if isinstance(data, dict) else None),
+            title=title
+            or (f"Video {data.get('id', 'Unknown')}" if isinstance(data, dict) else None),
             description=description,
             duration=None,
             thumbnail=None,
@@ -224,4 +225,3 @@ class BigGPTProvider(VideoParserProvider):
     def get_provider_name() -> str:
         """获取提供商名称"""
         return "bigpt"
-

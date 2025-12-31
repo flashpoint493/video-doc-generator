@@ -44,7 +44,7 @@ class VideoParser:
         else:
             # 延迟导入避免循环
             from video_doc_generator.providers.bigpt import BigGPTProvider
-            
+
             # 默认使用 BigGPT 提供商
             provider_name = provider_name or "bigpt"
             if provider_name.lower() == "bigpt":

@@ -3,8 +3,6 @@
 import tempfile
 from pathlib import Path
 
-import pytest
-
 from video_doc_generator.manager import VideoLink, VideoManager
 
 
@@ -34,7 +32,7 @@ def test_video_manager_add():
         manager = VideoManager(storage_path=str(storage_path))
 
         video = manager.add("https://www.youtube.com/watch?v=test", title="Test Video")
-        assert video.url == "https://www.youtube.com/watch?v=test"
+        assert str(video.url) == "https://www.youtube.com/watch?v=test"
         assert video.title == "Test Video"
         assert video.platform == "youtube"
         assert manager.count() == 1

@@ -5,7 +5,6 @@
 """
 
 import json
-import os
 from pathlib import Path
 from typing import Dict, List, Optional
 from urllib.parse import urlparse
@@ -79,13 +78,15 @@ class VideoManager:
         """保存视频链接到文件"""
         try:
             # 使用 model_dump 的 mode='json' 来确保 URL 正确序列化
-            data = [video.model_dump(mode='json') for video in self._videos]
+            data = [video.model_dump(mode="json") for video in self._videos]
             with open(self.storage_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
         except Exception as e:
             print(f"保存视频数据失败: {e}")
 
-    def add(self, url: str, title: Optional[str] = None, metadata: Optional[Dict] = None) -> VideoLink:
+    def add(
+        self, url: str, title: Optional[str] = None, metadata: Optional[Dict] = None
+    ) -> VideoLink:
         """
         添加视频链接
 
