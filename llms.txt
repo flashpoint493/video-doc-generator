@@ -1,0 +1,325 @@
+# Video Doc Generator
+
+> A Python package that manages video links, calls video parsing APIs to read and parse videos, and converts video content into professional documents and analysis reports.
+
+## Overview
+
+Video Doc Generator provides video link management, video parsing, and document generation capabilities.
+
+- **Package**: `pip install video-doc-generator`
+- **Python**: 3.8+
+- **Platforms**: Windows, macOS, Linux
+- **License**: MIT
+
+## Quick Start
+
+### Installation
+
+```bash
+# Basic installation
+pip install video-doc-generator
+
+# With development dependencies
+pip install video-doc-generator[dev]
+```
+
+### Basic Usage
+
+```python
+from video_doc_generator import VideoManager, VideoParser, DocumentGenerator
+
+# 1. Manage video links
+manager = VideoManager()
+manager.add("https://www.youtube.com/watch?v=example", title="Example Video")
+
+# 2. Parse video
+parser = VideoParser(api_key="your-api-key", api_url="https://api.example.com/video/parse")
+result = parser.parse("https://www.youtube.com/watch?v=example")
+
+# 3. Generate document
+generator = DocumentGenerator(output_dir="docs")
+filepath = generator.generate_markdown(result)
+```
+
+## Core API Reference
+
+### VideoManager Class
+
+The main class for managing video links.
+
+#### Constructor Parameters
+
+```python
+VideoManager(
+    storage_path: Optional[str] = None,  # Storage file path, default: ~/.video_doc_generator/videos.json
+)
+```
+
+#### Core Methods
+
+```python
+# Add a video link
+video = manager.add(
+    url: str,
+    title: Optional[str] = None,
+    metadata: Optional[Dict] = None,
+) -> VideoLink
+
+# Remove a video link
+success = manager.remove(url: str) -> bool
+
+# Get a video link by URL
+video = manager.get(url: str) -> Optional[VideoLink]
+
+# List all video links
+videos = manager.list_all() -> List[VideoLink]
+
+# Get video count
+count = manager.count() -> int
+
+# Clear all videos
+manager.clear() -> None
+```
+
+### VideoParser Class
+
+The class for parsing videos via API.
+
+#### Constructor Parameters
+
+```python
+VideoParser(
+    api_key: Optional[str] = None,      # API key from environment or parameter
+    api_url: Optional[str] = None,      # API URL from environment or parameter
+)
+```
+
+#### Core Methods
+
+```python
+# Parse video (synchronous)
+result = parser.parse(video_url: str) -> VideoParseResult
+
+# Parse video (asynchronous)
+result = await parser.parse_async(video_url: str) -> VideoParseResult
+```
+
+#### Return Types
+
+```python
+class VideoMetadata(BaseModel):
+    url: HttpUrl
+    title: Optional[str] = None
+    description: Optional[str] = None
+    duration: Optional[int] = None  # seconds
+    thumbnail: Optional[str] = None
+    author: Optional[str] = None
+    platform: Optional[str] = None
+
+class VideoTranscript(BaseModel):
+    text: str
+    segments: Optional[list] = None
+    language: Optional[str] = None
+
+class VideoParseResult(BaseModel):
+    metadata: VideoMetadata
+    transcript: Optional[VideoTranscript] = None
+    raw_data: Optional[Dict] = None
+```
+
+### DocumentGenerator Class
+
+The class for generating documents from video content.
+
+#### Constructor Parameters
+
+```python
+DocumentGenerator(
+    output_dir: Optional[str] = None,  # Output directory, default: "docs"
+)
+```
+
+#### Core Methods
+
+```python
+# Generate Markdown document
+filepath = generator.generate_markdown(
+    parse_result: VideoParseResult,
+    filename: Optional[str] = None,  # Output filename, default: video title or timestamp
+) -> Path
+```
+
+### VideoLink Class
+
+Data model for video links.
+
+```python
+class VideoLink(BaseModel):
+    url: HttpUrl
+    title: Optional[str] = None
+    platform: Optional[str] = None  # Auto-detected: youtube, bilibili, vimeo, unknown
+    added_at: Optional[str] = None
+    metadata: Optional[Dict] = None
+```
+
+## Command Line Interface
+
+```bash
+# Add a video link
+video-doc add "https://www.youtube.com/watch?v=example" --title "Example Video"
+
+# List all videos
+video-doc list
+
+# Remove a video link
+video-doc remove "https://www.youtube.com/watch?v=example"
+
+# Parse video and generate document
+video-doc parse "https://www.youtube.com/watch?v=example" --output-dir docs
+
+# Process all added videos
+video-doc process-all --output-dir docs
+```
+
+### CLI Options
+
+```bash
+# Parse command options
+video-doc parse <url> \
+    --output-dir <dir> \          # Output directory (default: docs)
+    --api-key <key> \             # Video parser API key
+    --api-url <url>               # Video parser API URL
+
+# Process-all command options
+video-doc process-all \
+    --output-dir <dir> \          # Output directory (default: docs)
+    --api-key <key> \             # Video parser API key
+    --api-url <url>               # Video parser API URL
+```
+
+## Configuration
+
+### Environment Variables
+
+```bash
+export VIDEO_PARSER_API_KEY="your-api-key"
+export VIDEO_PARSER_API_URL="https://api.example.com/video/parse"
+```
+
+### Config Class
+
+```python
+from video_doc_generator import Config
+
+config = Config()
+config.video_parser_api_key      # API key
+config.video_parser_api_url      # API URL
+config.storage_dir               # Storage directory
+config.videos_storage_path       # Videos storage file path
+config.default_output_dir        # Default output directory
+```
+
+## Examples
+
+### Example 1: Basic Usage
+
+```python
+from video_doc_generator import VideoManager, VideoParser, DocumentGenerator
+
+# Manage video links
+manager = VideoManager()
+manager.add("https://www.youtube.com/watch?v=example", title="Example Video")
+
+# Parse video
+parser = VideoParser(api_key="your-api-key")
+result = parser.parse("https://www.youtube.com/watch?v=example")
+
+# Generate document
+generator = DocumentGenerator(output_dir="docs")
+filepath = generator.generate_markdown(result)
+print(f"Document generated: {filepath}")
+```
+
+### Example 2: Batch Processing
+
+```python
+from video_doc_generator import VideoManager, VideoParser, DocumentGenerator
+
+manager = VideoManager()
+parser = VideoParser(api_key="your-api-key")
+generator = DocumentGenerator(output_dir="docs")
+
+# Process all videos
+for video in manager.list_all():
+    try:
+        result = parser.parse(str(video.url))
+        filepath = generator.generate_markdown(result)
+        print(f"Processed: {filepath}")
+    except Exception as e:
+        print(f"Error processing {video.url}: {e}")
+```
+
+### Example 3: Async Parsing
+
+```python
+import asyncio
+from video_doc_generator import VideoParser
+
+async def parse_videos(urls):
+    parser = VideoParser(api_key="your-api-key")
+    tasks = [parser.parse_async(url) for url in urls]
+    results = await asyncio.gather(*tasks)
+    return results
+
+urls = [
+    "https://www.youtube.com/watch?v=example1",
+    "https://www.youtube.com/watch?v=example2",
+]
+results = asyncio.run(parse_videos(urls))
+```
+
+## Platform Support
+
+| Platform | Status | Python | Notes |
+|----------|--------|--------|-------|
+| Windows | ✅ | 3.8+ | Full support |
+| macOS | ✅ | 3.8+ | Full support |
+| Linux | ✅ | 3.8+ | Full support |
+
+## Key Imports
+
+```python
+from video_doc_generator import (
+    Config,
+    VideoManager,
+    VideoParser,
+    DocumentGenerator,
+)
+
+# Or import specific classes
+from video_doc_generator.manager import VideoManager, VideoLink
+from video_doc_generator.parser import VideoParser, VideoParseResult, VideoMetadata, VideoTranscript
+from video_doc_generator.generator import DocumentGenerator
+```
+
+## Video Platform Detection
+
+The VideoLink class automatically detects video platforms:
+
+- **YouTube**: youtube.com, youtu.be
+- **Bilibili**: bilibili.com
+- **Vimeo**: vimeo.com
+- **Unknown**: Other platforms
+
+## Storage
+
+Video links are stored in JSON format at:
+- Default: `~/.video_doc_generator/videos.json`
+- Custom: Specify `storage_path` in `VideoManager()` constructor
+
+## Links
+
+- **Repository**: https://github.com/flashpoint493/video-doc-generator
+- **PyPI**: https://pypi.org/project/video-doc-generator/
+- **Documentation**: https://github.com/flashpoint493/video-doc-generator#readme
+- **Issues**: https://github.com/flashpoint493/video-doc-generator/issues
