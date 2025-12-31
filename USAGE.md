@@ -173,7 +173,7 @@ A: 访问 [BigGPT](https://bibigpt.co) 注册账号并获取 API Token。
 
 ### Q: 使用哪个 API 方法？
 
-A: 推荐使用 GET 方法（`--use-get`），免费且稳定。这是默认选项。
+A: 推荐使用 GET 方法（`--use-get`），这是默认选项。请访问 [BigGPT 官网](https://bibigpt.co) 了解最新的 API 定价和使用政策。
 
 ### Q: 生成的文档在哪里？
 

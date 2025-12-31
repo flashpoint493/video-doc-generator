@@ -1,5 +1,11 @@
 # Video Doc Generator
 
+![PyPI Version](https://img.shields.io/pypi/v/video-doc-generator)
+![License](https://img.shields.io/github/license/flashpoint493/video-doc-generator)
+![Python Version](https://img.shields.io/pypi/pyversions/video-doc-generator)
+![Build Status](https://img.shields.io/github/actions/workflow/status/flashpoint493/video-doc-generator/ci.yml?branch=main)
+![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)
+
 > 一个能够管理视频链接，调用视频解析 API 读取和解析视频，并将视频内容转换为专业文档和分析说明的 Python 包。
 
 ## 功能特性
@@ -108,9 +114,9 @@ parser = VideoParser(api_key="your-bigpt-api-key", use_get_method=True)
 1. 访问 [BigGPT](https://bibigpt.co)
 2. 注册/登录账号
 3. 获取 API Token
-4. 使用 GET 方法（免费且稳定）
+4. 推荐使用 GET 方法（更稳定）
 
-> **注意**: 当前版本主要支持 BigGPT API。推荐使用 GET 方法，免费且稳定。
+> **注意**: 当前版本主要支持 BigGPT API。推荐使用 GET 方法。请访问 [BigGPT 官网](https://bibigpt.co) 了解最新的 API 定价和使用政策。
 
 ## 项目结构
 
